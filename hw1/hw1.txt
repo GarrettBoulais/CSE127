@@ -1,0 +1,5 @@
+Answer to #1: 0xbffff7a8
+Answer to #2: eax
+Answer to #3: 0x80483c4
+Answer to #4: je
+Answer to #5: 0x8048443
