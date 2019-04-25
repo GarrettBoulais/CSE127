@@ -41,7 +41,6 @@ int main(void)
   // fill remainder of buf up. end with null char
   for(i; i < STR_SIZE-1;i++) {
    badStr[i] = 0x22;
-   printf("here\n");
   }
   badStr[STR_SIZE-1] = 0x00; 
   // add string to args list
