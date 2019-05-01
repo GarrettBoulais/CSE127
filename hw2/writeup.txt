@@ -1,9 +1,39 @@
 Description of sploit1 functionality: 
+For the first sploit, there is no bounds check when the target file calls 
+strcpy, so sploit1 fills the buffer just enough to overwrite the instruction
+pointer (eip). I make this point back to ther start of the buffer, which is 
+exactly where I put the shell code to spawn a root shell.
 
 Description of sploit2 functionality:
+In this buffer overflow attack, we are only able to overwite the LSB of
+ebp. In my case, I used the null terminator to 0 out that byte to make it
+point somewhere earlier in the buffer. When the function in the target file
+returns, it will go to the modified location. At that location+4 bytes, 
+the program assumes that is the address of the next instruction to be executed,
+so I just put the address of the shellcode in the buffer (in this case, it is
+at the end of the buffer) and then the program spawns a root shell.
 
 Description of sploit3 functionality:
+For this integer overflow attack, since the input number determines the number
+of struct widgets we create, and each widget is 32 bytes, I only needed to
+create one extra widget at the end in order to take control of eip. In order to 
+do this, I took the length of the array I wanted (555 structs), put an 0x8 in
+the MSB to mask it as a negative number when the target file does a bounds
+check, and then when the target file actually copies the buffer, it multiplies
+the length of the array * 32 to get the total number of bytes, but this shifts
+the bits of our length to (maliciousLength)*32, therefore copying in am extra 32
+bytes. At this point it became just like sploit1, overwite eip and point it to
+the shellcode to spawn a root shell.
 
 Description of sploit4 functionality:
+For this double free attack, we write into memory where a pointer q was
+previously freed, so when tfree(q) is called again, we can take modify pointers
+to memory and take control of the program. For the memory we can write to, we
+overwrite the chunk data to get a pointer to the return address, and then modify
+the return address to point to the start of our chunk of memory. At that
+location we have a jump to skip over corrupted memory, and I just tried
+different values until I hit my NOP sled, which leads straight to the shellcode
+to spawn a shell.
 
 References used:
+Discussion Slides 
