@@ -136,6 +136,7 @@ int main(int argc, char **argv) {
          
          if (sigsetjmp(jumpout, 1) == 1) {
             guess[i] = currChar;
+            break;
          }else{
             signal(SIGSEGV, SIG_DFL);
             signal(SIGSEGV, &handle_SEGV);

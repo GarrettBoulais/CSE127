@@ -1,5 +1,26 @@
 Description of memhack functionality:
+For the memhack, the password can have a maximum of 32 
+characters, so we first start with passwords of length 1 and
+work our way up. We try each possible character, and place our
+guess one byte before protected memory, that way if our guess
+is correct it will move to the next byte and segfault, telling
+us we made a correct guess. If that our last guess was the last
+character in the password then we will have guessed the correct
+password, otherwise we move to the next character, placing our
+current guess just before protected memory, leaving the last
+byte before protected memory free for our next guess. We 
+continue until our guess is the full password.
 
 Description of timehack functionality:
+For timehack, again the password can be 32 characters, so we
+start with passwords of length 1 and move up. We try each 
+possible character, and check our current guess 101 times and
+record the time it takes for check_pass to work. If a character 
+took longer than every other character, chances are that 
+character was right and check_pass went to check the next 
+character. So we add that character to our guess and move on to
+the next position, until check_pass succeeds and we get the
+correct password.
 
 References used:
+Discussion Slides from Friday
