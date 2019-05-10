@@ -1,0 +1,5 @@
+Description of memhack functionality:
+
+Description of timehack functionality:
+
+References used:
